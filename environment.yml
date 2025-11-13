@@ -1,0 +1,21 @@
+name: EksamensanalyseMaster
+channels:
+  - defaults
+  - https://repo.anaconda.com/pkgs/main
+  - https://repo.anaconda.com/pkgs/r
+dependencies:
+  # Core
+  - python=3.12
+  - ipykernel
+  - notebook
+
+  # Data processing
+  - numpy
+  - pandas
+  - scipy
+  - openpyxl
+
+  # Visualization
+  - matplotlib
+  - seaborn
+  - plotly

@@ -1,0 +1,55 @@
+# Configuration for IN1020_2024 dataset
+dataset_name: "IN1020_2024"
+file_path: "../data/csv_files/IN1020_2024_anon.csv"
+
+# Columns to remove from the dataset
+columns_to_remove:
+  - "Column1.result.ext_inspera_attendance"
+  - "Column1.result.lineItem.sourcedId"
+  - "Column1.result.lineItem.type"
+  - "Column1.result.student.type"
+  - "Column1.result.ext_inspera_autoScore"
+  - "Column1.result.sourcedId"
+  - "Column1.result.ext_inspera_userAssessmentSetupId"
+  - "Column1.result.ext_inspera_userAssessmentId"
+  - "Column1.result.dateLastModified"
+  - "Column1.result.student.sourcedId"
+  - "Column1.result.ext_inspera_questions.ext_inspera_questionId"
+  - "Column1.result.ext_inspera_questions.ext_inspera_questionContentItemId"
+  - "Column1.result.ext_inspera_questions.ext_inspera_questionWeight"
+  - "Column1.result.ext_inspera_questions.ext_inspera_candidateResponses.ext_insper.2"
+
+# Columns to convert to datetime
+datetime_columns:
+  - "Column1.result.ext_inspera_startTime"
+  - "Column1.result.ext_inspera_endTime"
+
+# Columns to treat as strings
+string_columns:
+  - "Column1.result.ext_inspera_questions.ext_inspera_candidateResponses.ext_inspera_"
+  - "Column1.result.ext_inspera_questions.ext_inspera_candidateResponses.ext_insper.1"
+  - "Column1.result.ext_inspera_questions.ext_inspera_questionTitle"
+
+# Column renaming mappings
+column_rename_map:
+  "Column1.result.ext_inspera_startTime": "exam_start_time"
+  "Column1.result.ext_inspera_endTime": "exam_end_time"
+  "Column1.result.ext_inspera_questions.ext_inspera_maxQuestionScore": "max_question_score"
+  "Column1.result.ext_inspera_questions.ext_inspera_questionNumber": "question_number"
+  "Column1.result.ext_inspera_questions.ext_inspera_questionTitle": "question_title"
+  "Column1.result.ext_inspera_questions.ext_inspera_durationSeconds": "question_duration_sec"
+  "Column1.result.ext_inspera_questions.ext_inspera_autoScore": "auto_score_per_question"
+  "Column1.result.ext_inspera_questions.ext_inspera_candidateResponses.ext_inspera_": "candidate_response_code"
+  "Column1.result.ext_inspera_questions.ext_inspera_candidateResponses.ext_insper.1": "candidate_response_text"
+  "Column1.result.ext_inspera_extraTimeMins": "extra_time_mins"
+  "Column1.result.ext_inspera_incidentTimeMins": "incident_time_mins"
+  "Column1.result.score": "total_score"
+  "Kjønn": "gender"
+  "Anonymisert kand.nr": "student_id"
+  "Column1.result.ext_inspera_finalGradeDate": "final_grade_date"
+  "Column1.result.ext_inspera_finalGrade": "final_grade"
+
+# Fill missing values configuration
+fill_missing_columns:
+  target: "Column1.result.ext_inspera_questions.ext_inspera_candidateResponses.ext_insper.1"
+  source: "Column1.result.ext_inspera_questions.ext_inspera_candidateResponses.ext_inspera_"
