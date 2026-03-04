@@ -106,25 +106,38 @@ def anonymize_dataframe_with_salt(df, column_name: str):
 
 def anonymize_IDs(df, column_name: str):
     """
-    Anonymizing candidate IDs in a DataFrame by changing each id with a random number from 1 to n, 
-    where the same random number is assigned to the same candidate ID.
+    Anonymize candidate IDs in-place by assigning each unique ID a random
+    number from 1..n, where the same random number is used for all rows that
+    belong to the same candidate.
+
+    Priority of column to anonymize:
+    1) Column1.result.ext_inspera_candidateId
+    2) Anonymisert kand.nr
+    3) column_name (for backward compatibility)
 
     Args:
         df (pandas.DataFrame): DataFrame to modify in-place
-        column_name (str): Column name containing candidate IDs
+        column_name (str): Optional fallback target column name
     """
-    if column_name not in df.columns:
-        raise ValueError(f"Column '{column_name}' not found in DataFrame")
-    
-    # Use factorize to get unique identifiers for each unique value
-    codes, uniques = pd.factorize(df[column_name])
-    
-    # Create a random permutation of numbers from 1 to n (where n is number of unique values)
+    preferred_column = "Column1.result.ext_inspera_candidateId"
+    fallback_column = "Anonymisert kand.nr"
+
+    if preferred_column in df.columns:
+        target_column = preferred_column
+    elif fallback_column in df.columns:
+        target_column = fallback_column
+    elif column_name in df.columns:
+        target_column = column_name
+    else:
+        raise ValueError(
+            "None of the expected columns were found. "
+            f"Tried '{preferred_column}', '{fallback_column}', and '{column_name}'."
+        )
+
+    codes, uniques = pd.factorize(df[target_column])
     n_unique = len(uniques)
     random_ids = np.random.permutation(range(1, n_unique + 1))
-    
-    # Map the factorized codes to random IDs
-    df[column_name] = random_ids[codes]
+    df[target_column] = random_ids[codes]
 
 
 def compare_columns(df, name1:str, name2:str):
