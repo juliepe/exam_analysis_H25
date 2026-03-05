@@ -17,7 +17,6 @@ columns_to_remove:
   - "Column1.result.ext_inspera_questions.ext_inspera_questionId"
   - "Column1.result.ext_inspera_questions.ext_inspera_questionContentItemId"
   - "Column1.result.ext_inspera_questions.ext_inspera_questionWeight"
-  - "Column1.result.ext_inspera_questions.ext_inspera_candidateResponses.ext_insper.2"
 
 # Columns to convert to datetime
 datetime_columns:
@@ -48,6 +47,7 @@ column_rename_map:
   "Anonymisert kand.nr": "student_id"
   "Column1.result.ext_inspera_finalGradeDate": "final_grade_date"
   "Column1.result.ext_inspera_finalGrade": "final_grade"
+  "Column1.result.ext_inspera_questions.ext_inspera_candidateResponses.ext_insper.2": "response_CBM"
 
 # Fill missing values configuration
 fill_missing_columns:
