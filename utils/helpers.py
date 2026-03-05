@@ -138,6 +138,8 @@ def anonymize_IDs(df, column_name: str):
     n_unique = len(uniques)
     random_ids = np.random.permutation(range(1, n_unique + 1))
     df[target_column] = random_ids[codes]
+    df.rename(columns={target_column: "student_id"}, inplace=True)
+    
 
 
 def compare_columns(df, name1:str, name2:str):
