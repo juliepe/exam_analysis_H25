@@ -1,0 +1,27 @@
+# Configuration for CBM analysis formatting
+dataset_name: "IN1020_2025konte"
+file_path: "../data/cleaned_data/IN1020_2025konte_cleaned_data.csv"
+
+# Columns to cast to string type before processing
+string_columns:
+  - "question_number"
+  - "response_CBM"
+
+# Columns to remove for CBM analysis
+columns_to_remove:
+  - "exam_start_time"
+  - "exam_end_time"
+  - "extra_time_mins"
+  - "incident_time_mins"
+  - "candidate_response_code"
+  - "candidate_response_text"
+  - "total_score"
+
+# Split configuration for response_CBM column
+response_split:
+  source_column: "response_CBM"
+  new_columns:
+    - "svaralternativ"
+    - "sikkerhetsgrad"
+  separator: " "
+  drop_source: true
