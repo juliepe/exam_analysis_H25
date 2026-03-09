@@ -133,3 +133,23 @@ def split_response_cbm(df, config):
         df.drop(columns=[src], inplace=True)
 
     return df
+
+
+def map_confidence_level(df, col='confidence_level'):
+    """
+    Map raw confidence level values to normalized weights.
+
+    Substitutes integer confidence scores with their corresponding weights:
+        5 → 1.0, 4 → 0.75, 3 → 0.5, 2 → 0.25, 1 → 0.0
+
+    Args:
+        df (pd.DataFrame): Input DataFrame
+        col (str): Name of the confidence level column to update
+
+    Returns:
+        pd.DataFrame: DataFrame with the confidence level column replaced by mapped values
+    """
+    mapping = {5: 1.0, 4: 0.75, 3: 0.5, 2: 0.25, 1: 0.0}
+    df = df.copy()
+    df[col] = pd.to_numeric(df[col], errors='coerce').map(mapping)
+    return df

@@ -21,7 +21,7 @@ columns_to_remove:
 response_split:
   source_column: "response_CBM"
   new_columns:
-    - "svaralternativ"
-    - "sikkerhetsgrad"
+    - "answer_alternative"
+    - "confidence_level"
   separator: " "
   drop_source: true
