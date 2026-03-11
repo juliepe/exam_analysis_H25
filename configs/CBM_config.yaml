@@ -15,7 +15,6 @@ columns_to_remove:
   - "incident_time_mins"
   - "candidate_response_code"
   - "candidate_response_text"
-  - "total_score"
 
 # Split configuration for response_CBM column
 response_split:

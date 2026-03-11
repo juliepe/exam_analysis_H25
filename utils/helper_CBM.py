@@ -140,7 +140,7 @@ def map_confidence_level(df, col='confidence_level'):
     Map raw confidence level values to normalized weights.
 
     Substitutes integer confidence scores with their corresponding weights:
-        5 → 1.0, 4 → 0.75, 3 → 0.5, 2 → 0.25, 1 → 0.0
+        5 → 100, 4 → 75, 3 → 50, 2 → 25, 1 → 0
 
     Args:
         df (pd.DataFrame): Input DataFrame
@@ -149,7 +149,7 @@ def map_confidence_level(df, col='confidence_level'):
     Returns:
         pd.DataFrame: DataFrame with the confidence level column replaced by mapped values
     """
-    mapping = {5: 1.0, 4: 0.75, 3: 0.5, 2: 0.25, 1: 0.0}
+    mapping = {5: 100, 4: 75, 3: 50, 2: 25, 1: 0}
     df = df.copy()
     df[col] = pd.to_numeric(df[col], errors='coerce').map(mapping)
     return df
