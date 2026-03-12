@@ -16,7 +16,7 @@ def load_data(file_path):
         pandas.DataFrame: Loaded DataFrame
     """
     try:
-        df = pd.read_csv(file_path)
+        df = pd.read_csv(file_path, dtype={'Column1.result.ext_inspera_questions.ext_inspera_questionNumber': str, 'question_number': str})
         print(f"Data loaded successfully from {file_path}")
         # print(f"Shape: {df.shape}")
         return df

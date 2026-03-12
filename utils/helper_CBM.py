@@ -153,3 +153,62 @@ def map_confidence_level(df, col='confidence_level'):
     df = df.copy()
     df[col] = pd.to_numeric(df[col], errors='coerce').map(mapping)
     return df
+
+
+def validate_and_remove_invalid_confidence(df, student_col='student_id',
+                                           question_col='question_number',
+                                           confidence_col='confidence_level',
+                                           expected_sum=100):
+    """
+    Validate that each student's confidence levels sum to the expected value per question,
+    print a summary of violations, and remove the invalid (student, question) rows.
+
+    For each (student, question) group the confidence_level values are summed.
+    If the sum differs from ``expected_sum``, the group is flagged as invalid,
+    a summary is printed, and those rows are dropped from the DataFrame.
+
+    Args:
+        df (pd.DataFrame): Input DataFrame (must already contain mapped confidence levels)
+        student_col (str): Column identifying each student
+        question_col (str): Column identifying each question
+        confidence_col (str): Column with the confidence level values
+        expected_sum (int): Expected sum of confidence levels per (student, question)
+
+    Returns:
+        pd.DataFrame: DataFrame with invalid (student, question) rows removed
+    """
+    df = df.copy()
+
+    conf_sums = (
+        df.groupby([student_col, question_col])[confidence_col]
+        .sum()
+        .reset_index(name='conf_sum')
+    )
+
+    invalid = conf_sums[conf_sums['conf_sum'] != expected_sum]
+
+    if invalid.empty:
+        print("All (student, question) confidence sums equal "
+              f"{expected_sum}. No rows removed.")
+        return df
+
+    # Summary per question
+    per_question = (
+        invalid.groupby(question_col)[student_col]
+        .nunique()
+        .reset_index(name='num_students')
+    )
+
+    print(f"Found {invalid[student_col].nunique()} student(s) with invalid "
+          f"confidence sums across {per_question.shape[0]} question(s):")
+    for _, row in per_question.iterrows():
+        print(f"  Question {row[question_col]}: "
+              f"{row['num_students']} student(s) with incorrect sum")
+
+    # Mark rows that belong to invalid (student, question) pairs
+    invalid_keys = invalid[[student_col, question_col]].drop_duplicates()
+    invalid_keys['_remove'] = True
+    df = df.merge(invalid_keys, on=[student_col, question_col], how='left')
+    df = df[df['_remove'].isna()].drop(columns='_remove').reset_index(drop=True)
+
+    return df
