@@ -71,6 +71,29 @@ def save_csv_file(df, name, folder='data'):
         print(f"❌ Error saving DataFrame: {e}")
 
 
+def save_excel_file(df, name, folder='data'):
+    """
+    Save a DataFrame to an Excel file.
+
+    Args:
+        df (pandas.DataFrame): The DataFrame to save
+        name (str): Name for the output Excel file (without extension)
+        folder (str or Path): Folder path where the file should be saved (default: 'data')
+    """
+    # Ensure folder exists
+    folder = Path(folder)
+    folder.mkdir(parents=True, exist_ok=True)
+
+    # Create full file path
+    path = folder / f"{name}.xlsx"
+
+    try:
+        df.to_excel(path, index=False)
+        print(f"✅ DataFrame saved as: {path}")
+    except Exception as e:
+        print(f"❌ Error saving DataFrame: {e}")
+
+
 def derive_irreversible_id(original_id: str, salt: bytes, iterations=200): # standard iterations is 200,000
     """
     Generate irreversible anonymized ID using PBKDF2-HMAC-SHA256.
