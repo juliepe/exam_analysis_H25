@@ -46,7 +46,7 @@ def cbm_total_score1( df, student_col='student_id', question_col='question_numbe
         question_maps.get(str(q), {}).get(int(a), 0.0) if pd.notna(a) else 0.0
         for q, a in zip(df[question_col], answer_nums)
     ]
-    df['_contribution'] = pd.array(score_values, dtype=float) * df[confidence_col].values
+    df['_contribution'] = pd.array(score_values, dtype=float) * (df[confidence_col] / 100).values
 
     total_per_student = df.groupby(student_col)['_contribution'].sum()
     df[output_col] = df[student_col].map(total_per_student).apply(round_to_nearest_half)
@@ -55,7 +55,7 @@ def cbm_total_score1( df, student_col='student_id', question_col='question_numbe
     return df
 
 
-
+#brukes ikke
 def cbm_total_score2(
     df,
     student_col='student_id',
@@ -95,7 +95,7 @@ def cbm_total_score2(
         question_maps.get(str(q), {}).get(int(a), 0.0) if pd.notna(a) else 0.0
         for q, a in zip(df[question_col], answer_nums)
     ]
-    df['_contribution'] = pd.array(score_values, dtype=float) * df[confidence_col].values
+    df['_contribution'] = pd.array(score_values, dtype=float) * (df[confidence_col] / 100).values
 
     total_per_student = df.groupby(student_col)['_contribution'].sum()
     df[output_col] = df[student_col].map(total_per_student).apply(round_to_nearest_half)
@@ -136,7 +136,7 @@ def cbm_total_score_exam(
         question_maps.get(str(q), {}).get(int(a), 0.0) if pd.notna(a) else 0.0
         for q, a in zip(df[question_col], answer_nums)
     ]
-    df['_contribution'] = pd.array(score_values, dtype=float) * df[confidence_col].values
+    df['_contribution'] = pd.array(score_values, dtype=float) * (df[confidence_col] / 100).values
 
     total_per_student = df.groupby(student_col)['_contribution'].sum()
     df[output_col] = df[student_col].map(total_per_student).apply(round_to_nearest_half)

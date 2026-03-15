@@ -199,8 +199,13 @@ def validate_and_remove_invalid_confidence(df, student_col='student_id',
         .reset_index(name='num_students')
     )
 
+    under = invalid[invalid['conf_sum'] < expected_sum]
+    over = invalid[invalid['conf_sum'] > expected_sum]
+
     print(f"Found {invalid[student_col].nunique()} student(s) with invalid "
           f"confidence sums across {per_question.shape[0]} question(s):")
+    print(f"  Under {expected_sum}: {under[student_col].nunique()} student(s)")
+    print(f"  Over  {expected_sum}: {over[student_col].nunique()} student(s)")
     for _, row in per_question.iterrows():
         print(f"  Question {row[question_col]}: "
               f"{row['num_students']} student(s) with incorrect sum")
