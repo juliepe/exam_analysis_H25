@@ -217,3 +217,50 @@ def validate_and_remove_invalid_confidence(df, student_col='student_id',
     df = df[df['_remove'].isna()].drop(columns='_remove').reset_index(drop=True)
 
     return df
+
+
+def remove_over_confidence(df, student_col='student_id',
+                           question_col='question_number',
+                           confidence_col='confidence_level',
+                           max_sum=100):
+    """
+    Remove rows where a student's confidence levels for a question sum to more than the allowed maximum.
+
+    Rows whose confidence sum equals or is below ``max_sum`` are kept, even if the
+    sum is less than ``max_sum``.
+
+    Args:
+        df (pd.DataFrame): Input DataFrame (must already contain mapped confidence levels)
+        student_col (str): Column identifying each student
+        question_col (str): Column identifying each question
+        confidence_col (str): Column with the confidence level values
+        max_sum (int): Maximum allowed sum of confidence levels per (student, question)
+
+    Returns:
+        pd.DataFrame: DataFrame with over-confidence (student, question) rows removed
+    """
+    df = df.copy()
+
+    conf_sums = (
+        df.groupby([student_col, question_col])[confidence_col]
+        .sum()
+        .reset_index(name='conf_sum')
+    )
+
+    over = conf_sums[conf_sums['conf_sum'] > max_sum]
+
+    if over.empty:
+        print("No (student, question) pairs with confidence sum exceeding "
+              f"{max_sum}. No rows removed.")
+        return df
+
+    print(f"Found {over[student_col].nunique()} student(s) with confidence sum "
+          f"exceeding {max_sum} across "
+          f"{over[question_col].nunique()} question(s). Removing those rows.")
+
+    over_keys = over[[student_col, question_col]].drop_duplicates()
+    over_keys['_remove'] = True
+    df = df.merge(over_keys, on=[student_col, question_col], how='left')
+    df = df[df['_remove'].isna()].drop(columns='_remove').reset_index(drop=True)
+
+    return df
