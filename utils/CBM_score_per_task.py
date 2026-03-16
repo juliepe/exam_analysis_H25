@@ -47,11 +47,11 @@ def CBM_score_per_task_konte_no_F(df, question_number, map_answers):
         DataFrame with columns student_id and score for the given question
     """
 
-    # CBM point matrix
+    # CBM point matrix, M and F is the same since F is not used
     R = [2, 4, 6, 8]
     P = [1, 2, 3, 4]
     M = [0, -4, -8, -12]
-    F = [0, 0, 0, 0]
+    F = [0, -4, -8, -12]
 
     SCORE_MAP = {'R': R, 'P': P, 'M': M, 'F': F}
     CONFIDENCE_TO_INDEX = {25: 0, 50: 1, 75: 2, 100: 3}
