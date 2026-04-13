@@ -145,22 +145,25 @@ def anonymize_IDs(df, column_name: str):
     preferred_column = "Column1.result.ext_inspera_candidateId"
     fallback_column = "Anonymisert kand.nr"
 
-    if preferred_column in df.columns:
-        target_column = preferred_column
-    elif fallback_column in df.columns:
-        target_column = fallback_column
-    elif column_name in df.columns:
-        target_column = column_name
-    else:
-        raise ValueError(
-            "None of the expected columns were found. "
-            f"Tried '{preferred_column}', '{fallback_column}', and '{column_name}'."
-        )
+    #slette senere
+    target_column = preferred_column
 
-    codes, uniques = pd.factorize(df[target_column])
-    n_unique = len(uniques)
-    random_ids = np.random.permutation(range(1, n_unique + 1))
-    df[target_column] = random_ids[codes]
+    # if preferred_column in df.columns:
+    #     target_column = preferred_column
+    # elif fallback_column in df.columns:
+    #     target_column = fallback_column
+    # elif column_name in df.columns:
+    #     target_column = column_name
+    # else:
+    #     raise ValueError(
+    #         "None of the expected columns were found. "
+    #         f"Tried '{preferred_column}', '{fallback_column}', and '{column_name}'."
+    #     )
+
+    # codes, uniques = pd.factorize(df[target_column])
+    # n_unique = len(uniques)
+    # random_ids = np.random.permutation(range(1, n_unique + 1))
+    # df[target_column] = random_ids[codes]
     df.rename(columns={target_column: "student_id"}, inplace=True)
     
 
